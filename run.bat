@@ -1,0 +1,1 @@
+python.exe c:\users\401\Desktop\pyrw\test_and_go_interactive.py

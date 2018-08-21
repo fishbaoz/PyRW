@@ -104,6 +104,34 @@ class ReadWriteEverything(object):
         fullCommand = '/Min /Nologo /Stdout /Command="%s"' % (cmd)
         return self.callRawCommand(fullCommand)
 
+    def readIO32(self, address):
+        '''
+        Brief:
+            Reads 32bits from a given ports
+        ''' 
+#        n = self.callRWECommand("SAVE %s Memory 0x%X %d" % (LOCAL_TMP_FILE, byteOffset, numBytes))
+        n = self.callRWECommand("SAVE %s IOSpace 0x%X" % (LOCAL_TMP_FILE, address))
+        assert n.ReturnCode == 0, "Didn't return 0"
+        verifyAddress(address, n.Output)
+
+        with open(LOCAL_TMP_FILE, 'rb') as f:
+            data = f.read()
+        print('read %s' % (data))
+        os.remove(LOCAL_TMP_FILE)
+        value = data[0] + data[1] * 256 + data[2] * 256*256 + data[3] *256*256*256
+        return value
+    def writeIO32(self, address, data):
+        '''
+        Brief:
+            Reads 32bits from a given ports
+        ''' 
+#        n = self.callRWECommand("SAVE %s Memory 0x%X %d" % (LOCAL_TMP_FILE, byteOffset, numBytes))
+        n = self.callRWECommand("O32 0x%X 0x%X" % (address, data))
+        print ('O32 0x%X 0x%X' % (address, data))
+#        assert n.ReturnCode == 0, "Didn't return 0"
+#        verifyAddress(address, n.Output)
+
+#        return n
     def readMemory(self, byteOffset, numBytes):
         '''
         Brief:
