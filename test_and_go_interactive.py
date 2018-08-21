@@ -25,12 +25,14 @@ if __name__ == '__main__':
         gpiobase = data[0x48] + data[0x49] * 256 + data[0x4a]*256*256 + data[0x4b] *245*256*256 - 1
 #gpiobase = data[0] + data[1] * 256+ data[2] * 256 * 256 + data[3] *256*256*256
         print ('%#x' % gpiobase)
-        gpio=50
+        gpio=91
+        gpioport = gpiobase + 0x100 + gpio * 8
         print ('Set owner')
-        data = rwe.readIO32(0x1fd8)
-        rwe.writeIO32(0x1fd8, 0x80000001)
+        print ('%#x' % gpioport)
+        data = rwe.readIO32(gpioport)
+        rwe.writeIO32(gpioport, 0x80000001)
         # rwe.getRWEVersion()
-        print ('%#x' % data)
+#        print ('%#x' % data)
         # we should be interactive..
 #    else:
 #        os.chdir(THIS_FOLDER)
